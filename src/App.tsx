@@ -1,19 +1,7 @@
-import { Link } from "react-router-dom";
+import AppRouter from "./pages/Router";
 
 function App() {
-  return (
-    <div>
-      <Link to={`/main`}>
-        <button>Main</button>
-      </Link>
-      <Link to={`/diary`}>
-        <button>Diary</button>
-      </Link>
-      <Link to={`/todo`}>
-        <button>Todo</button>
-      </Link>
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;
