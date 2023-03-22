@@ -1,20 +1,18 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import SocialLogin from "../components/auth/SocialLogin";
+import { authService } from "../util/firebase";
 
 function Landing() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (authService.currentUser) {
+      navigate("/main");
+    }
+  }, []);
   return (
     <div>
-      <Link to={`/main`}>
-        <button>Main</button>
-      </Link>
-      <Link to={`/diary`}>
-        <button>Diary</button>
-      </Link>
-      <Link to={`/todo`}>
-        <button>Todo</button>
-      </Link>
-      <Link to={`/calendar`}>
-        <button>Calendar</button>
-      </Link>
+      <SocialLogin />
     </div>
   );
 }
