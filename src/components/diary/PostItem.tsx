@@ -2,7 +2,6 @@ import MDEditor from "@uiw/react-md-editor";
 import styled from "styled-components";
 
 function PostItem({ postData }: any) {
-  console.log("postData : ", postData);
   return (
     <Wrap>
       <TitleBox>
