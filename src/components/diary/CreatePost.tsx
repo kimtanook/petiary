@@ -3,12 +3,12 @@ import MDEditor from "@uiw/react-md-editor";
 import * as commands from "@uiw/react-md-editor/lib/commands";
 import "@uiw/react-md-editor/markdown-editor.css";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
-import { addDiaryPost } from "../../util/api";
+import { addDiaryPost, deleteDiaryPostImage } from "../../util/api";
 import { mdPostState } from "../../util/atom";
 import { storageService } from "../../util/firebase";
 
@@ -59,10 +59,31 @@ const CreatePost = () => {
     navigate("/diary");
   };
 
+  const storageImageDelete = () => {
+    const regex: RegExp = /images%2F(\w+-\w+-\w+-\w+-\w+)/;
+    const match: RegExpMatchArray | null = mdContent.match(regex);
+
+    if (match) {
+      const extractedString: string = match[1];
+      console.log(extractedString); // 출력 결과: fcfa3678-4b1e-49a7-ba4d-404b504e808d
+      deleteDiaryPostImage({ imageUrl: extractedString });
+    }
+  };
+
+  useEffect(() => {
+    return storageImageDelete();
+  }, []);
+
   return (
     <div>
       <Link to={"/diary"}>
-        <div>뒤로가기</div>
+        <div
+          onClick={() => {
+            setMdContent("");
+          }}
+        >
+          뒤로가기
+        </div>
       </Link>
       <input onChange={onChangeTitle} placeholder="제목을 입력해주세요." />
       <MDEditor
