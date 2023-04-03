@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import LeftCategory from "../components/category/LeftCategory";
+import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
 import { authService } from "../util/firebase";
 import Calendar from "./Calendar";
@@ -28,6 +29,7 @@ const AppRouter = () => {
           <Route path="/detail-diary/:postId" element={<DetailPost />} />
         </Routes>
       </Wrap>
+      {user ? <Footer /> : null}
     </>
   );
 };
