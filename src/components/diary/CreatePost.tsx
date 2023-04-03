@@ -3,7 +3,7 @@ import MDEditor from "@uiw/react-md-editor";
 import * as commands from "@uiw/react-md-editor/lib/commands";
 import "@uiw/react-md-editor/markdown-editor.css";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -16,6 +16,7 @@ const CreatePost = () => {
   const [mdContent, setMdContent] = useRecoilState<string>(mdPostState);
   const [diaryTitle, setDiaryTitle] = useState("");
   const navigate = useNavigate();
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setDiaryTitle(event.target.value);
@@ -23,6 +24,7 @@ const CreatePost = () => {
 
   const handleImageChange = (e: any) => {
     let file = e.target.files;
+    console.log("file : ", file);
     if (file.length === 0) {
       return;
     } else {
@@ -45,6 +47,9 @@ const CreatePost = () => {
           })
         );
       };
+      if (fileInput.current !== null) {
+        fileInput.current.value = "";
+      }
     }
   };
 
@@ -60,7 +65,7 @@ const CreatePost = () => {
   };
 
   const storageImageDelete = () => {
-    const regex: RegExp = /images%2F(\w+-\w+-\w+-\w+-\w+)/;
+    const regex: RegExp = /(\w+-\w+-\w+-\w+-\w+)/;
     const match: RegExpMatchArray | null = mdContent.match(regex);
 
     if (match) {
@@ -75,7 +80,7 @@ const CreatePost = () => {
   }, []);
 
   return (
-    <div>
+    <MdEditorBox>
       <Link to={"/diary"}>
         <div
           onClick={() => {
@@ -128,6 +133,7 @@ const CreatePost = () => {
                   <div>이미지선택</div>
                   <input
                     type="file"
+                    ref={fileInput}
                     accept="image/*"
                     onChange={(event) => {
                       handleImageChange(event);
@@ -152,7 +158,7 @@ const CreatePost = () => {
         ]}
       />
       <button onClick={submitPost}>작성완료</button>
-    </div>
+    </MdEditorBox>
   );
 };
 
