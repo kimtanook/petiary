@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 import { getDiaryPost } from "../../util/api";
 
 function PostList() {
@@ -7,12 +8,15 @@ function PostList() {
     ["diaryData"],
     getDiaryPost
   );
-  console.log("diaryPostData : ", diaryPostData);
   return (
     <div>
       <div>PostList</div>
       {diaryPostData?.map((data: any) => (
-        <Link to={`/detail-diary/${data.id}`} state={{ postData: data }}>
+        <Link
+          to={`/detail-diary/${data.id}`}
+          state={{ postData: data }}
+          key={uuidv4()}
+        >
           <div>{data.title}</div>
         </Link>
       ))}
