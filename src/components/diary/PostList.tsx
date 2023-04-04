@@ -4,10 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getDiaryPost } from "../../util/api";
 
 function PostList() {
-  const { data: diaryPostData, isLoading: diaryPostLoading } = useQuery(
-    ["diaryData"],
-    getDiaryPost
-  );
+  const { data: diaryPostData } = useQuery(["diaryData"], getDiaryPost);
   return (
     <div>
       <div>PostList</div>
