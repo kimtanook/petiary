@@ -7,7 +7,7 @@ function Logout() {
   const onClickLogout = () => {
     signOut(authService).then(() => {
       alert("로그아웃 성공!");
-      navigate("/landing");
+      navigate("/");
     });
   };
   return (
