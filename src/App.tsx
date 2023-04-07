@@ -11,9 +11,9 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(authService, (user) => {
       if (user) {
-        navigate("/");
+        navigate("/main");
       } else {
-        navigate("/landing");
+        navigate("/");
       }
       setInit(true);
     });
