@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SocialLogin from "../components/auth/SocialLogin";
+import styled from "styled-components";
+import LoginAndSignUp from "../components/auth/LoginAndSignUp";
 import { authService } from "../util/firebase";
 
 function Landing() {
@@ -12,10 +13,11 @@ function Landing() {
     }
   }, []);
   return (
-    <div>
-      <SocialLogin />
-    </div>
+    <Wrap>
+      <LoginAndSignUp />
+    </Wrap>
   );
 }
 
 export default Landing;
+const Wrap = styled.div``;
