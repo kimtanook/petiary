@@ -1,5 +1,8 @@
+import styled from "styled-components";
+
 function Calendar() {
-  return <div>Calendar</div>;
+  return <Wrap>Calendar</Wrap>;
 }
 
 export default Calendar;
+const Wrap = styled.div``;
