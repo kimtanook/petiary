@@ -1,30 +1,29 @@
-import {
-  GithubAuthProvider,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+import { useMutation } from "@tanstack/react-query";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import styled from "styled-components";
+import { addUserData } from "../../util/api";
 import { authService } from "../../util/firebase";
-import LoginAndSignUp from "./LoginAndSignUp";
 
 const SocialLogin = () => {
-  const onGoogleLogIn = async () => {
-    let provider;
-    provider = new GoogleAuthProvider();
-    await signInWithPopup(authService, provider);
-  };
-  const onGithubLogIn = async () => {
-    let provider;
-    provider = new GithubAuthProvider();
-    await signInWithPopup(authService, provider);
+  const { mutate: addUserInfo } = useMutation(addUserData);
+  const onGoogleLogIn = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(authService, provider).then(() => {
+      const userInfo: any = {
+        uid: authService.currentUser?.uid,
+        userName: authService.currentUser?.displayName,
+        userImg: "",
+      };
+      addUserInfo(userInfo);
+      alert("로그인 성공!");
+    });
   };
 
   return (
-    <div className="auth-container">
-      <LoginAndSignUp />
-      <div className="social-button-container">
+    <Wrap onClick={onGoogleLogIn}>
+      <ImgBox>
         <svg
           className="social-icon"
-          onClick={onGoogleLogIn}
           xmlns="http://www.w3.org/2000/svg"
           aria-label="Google"
           role="img"
@@ -48,22 +47,25 @@ const SocialLogin = () => {
             d="M153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55z"
           />
         </svg>
-        <svg
-          className="social-icon"
-          onClick={onGithubLogIn}
-          xmlns="http://www.w3.org/2000/svg"
-          aria-label="GitHub"
-          role="img"
-          viewBox="0 0 512 512"
-        >
-          <rect width="512" height="512" rx="15%" fill="#1B1817" />
-          <path
-            fill="#fff"
-            d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"
-          />
-        </svg>
-      </div>
-    </div>
+      </ImgBox>
+      <LoginText>10초만에 구글아이디로 로그인</LoginText>
+    </Wrap>
   );
 };
 export default SocialLogin;
+const Wrap = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid #ff952477;
+  border-radius: 8px;
+  padding: 0 8px 0 4px;
+  margin-top: 40px;
+  background-color: white;
+`;
+const ImgBox = styled.div`
+  width: 40px;
+  height: 40px;
+`;
+const LoginText = styled.div``;
