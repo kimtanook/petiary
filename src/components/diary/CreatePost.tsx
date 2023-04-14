@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import "@uiw/react-markdown-preview/markdown.css";
 import MDEditor from "@uiw/react-md-editor";
 import * as commands from "@uiw/react-md-editor/lib/commands";
@@ -9,17 +10,34 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
-import { addDiaryPost, updateDiaryPost } from "../../util/api";
+import { createDiaryPost, updateDiaryPost } from "../../util/api";
 import { mdPostState } from "../../util/atom";
 import { authService, storageService } from "../../util/firebase";
 
 const CreatePost = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const location = useLocation();
   const [mdContent, setMdContent] = useRecoilState<string>(mdPostState);
   const [diaryTitle, setDiaryTitle] = useState("");
   const [openValue, setOpenValue] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+  const { mutate: createPost } = useMutation(createDiaryPost, {
+    onSuccess: () => {
+      setTimeout(() => {
+        queryClient.invalidateQueries(["diaryData"]);
+        queryClient.invalidateQueries(["getOpenDiaryPost"]);
+      }, 300);
+    },
+  });
+  const { mutate: updatePost } = useMutation(updateDiaryPost, {
+    onSuccess: () => {
+      setTimeout(() => {
+        queryClient.invalidateQueries(["diaryData"]);
+        queryClient.invalidateQueries(["getOpenDiaryPost"]);
+      }, 300);
+    },
+  });
 
   const onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setDiaryTitle(event.target.value);
@@ -55,11 +73,11 @@ const CreatePost = () => {
       }
     }
   };
-
   const submitPost = () => {
     if (!location.state) {
-      addDiaryPost({
+      createPost({
         uid: authService.currentUser?.uid,
+        userName: authService.currentUser?.displayName,
         createdAt: Date.now(),
         title: diaryTitle,
         content: mdContent,
@@ -69,7 +87,7 @@ const CreatePost = () => {
       setMdContent("");
       navigate("/diary");
     } else {
-      updateDiaryPost({
+      updatePost({
         id: location.state.id,
         title: diaryTitle,
         content: mdContent,
@@ -104,7 +122,7 @@ const CreatePost = () => {
           navigate("/diary");
         }}
       >
-        〈
+        〈 뒤로
       </BackButton>
       <TitleInput
         onChange={onChangeTitle}
@@ -160,9 +178,9 @@ const CreatePost = () => {
               ),
               children: (handle: any) => {
                 return (
-                  <div style={{ width: 120, padding: 10 }}>
+                  <FileInputBox>
                     <div>이미지선택</div>
-                    <input
+                    <FileInput
                       type="file"
                       ref={fileInput}
                       accept="image/*"
@@ -172,15 +190,15 @@ const CreatePost = () => {
                       }}
                       alt="image"
                     />
-                    <button
+                    <CloseBtn
                       type="button"
                       onClick={() => {
                         handle.close();
                       }}
                     >
                       Close
-                    </button>
-                  </div>
+                    </CloseBtn>
+                  </FileInputBox>
                 );
               },
 
@@ -198,13 +216,11 @@ const CreatePost = () => {
 
 export default CreatePost;
 
-const Wrap = styled.div`
-  width: 80vw;
-`;
+const Wrap = styled.div``;
 
 const BackButton = styled.div`
   cursor: pointer;
-  width: 24px;
+  width: 60px;
   font-size: 24px;
   text-align: center;
   margin: 4px;
@@ -227,9 +243,28 @@ const OpenValue = styled.label`
 const EditorBox = styled.div`
   margin: 4px;
 `;
+const FileInputBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px;
+`;
+const FileInput = styled.input`
+  cursor: pointer;
+  background-color: #c3c3c3;
+  width: 200px;
+  margin: 8px;
+`;
+const CloseBtn = styled.button`
+  cursor: pointer;
+  width: 80px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 8px;
+`;
 const SubmitButton = styled.button`
   cursor: pointer;
-  background-color: #ff8b32;
+  background-color: #ffb06f;
   color: white;
   border: none;
   width: 100px;
