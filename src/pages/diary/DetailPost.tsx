@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
-import PostItem from "../../components/diary/PostItem";
+import DetailPostItem from "../../components/diary/DetailPostItem";
 
 function DetailPost() {
   const location = useLocation();
   const { postData } = location.state;
-  return <PostItem postData={postData} />;
+  return <DetailPostItem postData={postData} />;
 }
 
 export default DetailPost;
