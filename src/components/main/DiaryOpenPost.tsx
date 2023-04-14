@@ -1,24 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { v4 as uuidv4 } from "uuid";
-import { getOpenDiaryPost } from "../../util/api";
 
-function DiaryOpenPost() {
-  const { data } = useQuery(["getOpenDiaryPost"], getOpenDiaryPost);
+function DiaryOpenPost({ item }: any) {
+  const day = new Date(item.createdAt! + 9 * 60 * 60 * 1000).toLocaleString(
+    "ko-KR",
+    {
+      timeZone: "UTC",
+    }
+  );
   return (
     <Wrap>
-      <div>
-        {data?.map((item: any) => (
-          <Link
-            to={`/main/${item.id}`}
-            state={{ postData: item }}
-            key={uuidv4()}
-          >
-            <div>{item.title}</div>
-          </Link>
-        ))}
-      </div>
+      {item.title}
+      {day}
     </Wrap>
   );
 }
