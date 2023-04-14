@@ -1,12 +1,20 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../img/logo/logo-row2.png";
+import { authService } from "../../util/firebase";
 import Logout from "./Logout";
 
 function Header() {
+  const navigate = useNavigate();
+  const userImg = authService.currentUser?.photoURL;
+
   return (
     <Wrap>
       <img src={Logo} alt="logo" height={50} />
-      <Logout />
+      <HeaderRight>
+        <Profile src={`${userImg}`} onClick={() => navigate("/my-page")} />
+        <Logout />
+      </HeaderRight>
     </Wrap>
   );
 }
@@ -18,8 +26,18 @@ const Wrap = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 16px 0px 16px;
   height: 70px;
   background-color: white;
   position: relative;
+  padding: ${({ theme }) => theme.padding};
+`;
+const HeaderRight = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 80px;
+`;
+const Profile = styled.img`
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
 `;
