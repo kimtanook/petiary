@@ -1,25 +1,30 @@
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import Layout from "../components/Layout";
-import LeftCategory from "../components/category/LeftCategory";
+import NavBar from "../components/Nav/NavBar";
 import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
 import { authService } from "../util/firebase";
 import Calendar from "./Calendar";
 import Landing from "./Landing";
-import Main from "./Main";
 import Todo from "./Todo";
 import DetailPost from "./diary/DetailPost";
 import Diary from "./diary/Diary";
 import PostForm from "./diary/PostForm";
+import Main from "./main/Main";
+import MyPage from "./mypage/MyPage";
 
 const AppRouter = () => {
   const user = authService.currentUser;
   return (
     <>
-      {user ? <Header /> : null}
+      {user ? (
+        <>
+          <Header />
+          <NavBar />
+        </>
+      ) : null}
       <Wrap>
-        {user ? <LeftCategory /> : null}
         <ContentWrap>
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -31,6 +36,7 @@ const AppRouter = () => {
             <Route path="/todo" element={<Todo />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/main/:postId" element={<DetailPost />} />
+            <Route path="/my-page" element={<MyPage />} />
           </Routes>
         </ContentWrap>
       </Wrap>
@@ -43,10 +49,14 @@ const AppRouter = () => {
 export default AppRouter;
 const Wrap = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100vw;
-  height: 100vh;
-  background-color: beige;
+  min-height: 100vh;
 `;
 const ContentWrap = styled.div`
-  padding: 12px;
+  padding: 32px 32px 32px 32px;
+  background-color: wheat;
+  width: 80vw;
+  min-height: 100vh;
 `;
