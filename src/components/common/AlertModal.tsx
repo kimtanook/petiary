@@ -3,7 +3,7 @@ import styled from "styled-components";
 import alertImg from "../../img/alert/alert.png";
 import { Alert } from "../../util/atom";
 
-function CustomAlert({ alertModal }: any) {
+function AlertModal({ alertModal }: any) {
   const [customAlert, setCustomAlert] = useRecoilState(Alert);
   return (
     <Wrap>
@@ -20,14 +20,14 @@ function CustomAlert({ alertModal }: any) {
             })
           }
         >
-          닫기
+          확인
         </CloseButton>
       </Box>
     </Wrap>
   );
 }
 
-export default CustomAlert;
+export default AlertModal;
 const Wrap = styled.div`
   position: absolute;
   top: 50%;
