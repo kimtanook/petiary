@@ -53,15 +53,15 @@ export const getDiaryPost = async ({ queryKey }: any) => {
   return response;
 };
 // 다이어리 포스트 저장
-export const addDiaryPost = (data: any) => {
+export const createDiaryPost = async (data: any) => {
   addDoc(collection(dbService, "diary"), data);
 };
 // 다이어리 포스트 수정
-export const updateDiaryPost = (data: any) => {
+export const updateDiaryPost = async (data: any) => {
   return updateDoc(doc(dbService, `diary/${data.id}`), data);
 };
 // 다이어리 포스트 삭제
-export const deleteDiaryPost = (data: any) => {
+export const deleteDiaryPost = async (data: any) => {
   deleteDoc(doc(dbService, `diary/${data.id}`));
 };
 
