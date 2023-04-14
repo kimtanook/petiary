@@ -2,11 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import profileIcon from "../../img/icon/profileicon.svg";
 import logo from "../../img/logo/logo-column.png";
 import { addUserData } from "../../util/api";
 import { Alert } from "../../util/atom";
@@ -16,7 +18,9 @@ import SocialLogin from "./SocialLogin";
 const LoginAndSignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [newAccount, setNewAccount] = useState(true);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newAccount, setNewAccount] = useState(false);
+  const [nickname, setNickname] = useState("");
   const [error, setError] = useState<any>("");
   const [alertModal, setAlertModal] = useRecoilState(Alert);
   const { mutate: addUserInfo } = useMutation(addUserData);
@@ -32,28 +36,45 @@ const LoginAndSignUp = () => {
       // value은 event.target.value와 같다.
     } else if (name === "password") {
       setPassword(value);
+    } else if (name === "nickname") {
+      setNickname(value);
+    } else if (name === "confirmPassword") {
+      setConfirmPassword(value);
     }
   };
   const onSubmit = async (event: any) => {
     event.preventDefault();
     try {
-      if (!newAccount === true) {
+      if (newAccount === true) {
+        if (password !== confirmPassword) {
+          return alert("비밀번호를 확인해주세요!");
+        }
         await createUserWithEmailAndPassword(authService, email, password).then(
           () => {
+            updateProfile(authService?.currentUser!, {
+              displayName: nickname,
+              photoURL: profileIcon,
+            });
             const userInfo = {
               uid: authService.currentUser?.uid,
-              userName: authService.currentUser?.displayName,
-              userImg: "",
+              userName: nickname,
+              userImg: profileIcon,
             };
             addUserInfo(userInfo);
-            alert("회원가입 성공!");
+            setAlertModal({
+              toggle: true,
+              message: "회원가입 성공!",
+            });
             navigate("/main");
           }
         );
       } else {
         await signInWithEmailAndPassword(authService, email, password).then(
           () => {
-            alert("로그인 성공!");
+            setAlertModal({
+              toggle: true,
+              message: "로그인 성공!",
+            });
             navigate("/main");
           }
         );
@@ -97,31 +118,69 @@ const LoginAndSignUp = () => {
       <LandingTitle>펫티어리로 반려동물의 추억을 남겨보세요!</LandingTitle>
       <LogoImg src={logo} alt="logo" />
       <form onSubmit={onSubmit}>
-        <InputWrap>
-          <Input
-            name="email"
-            type="text"
-            placeholder="Email"
-            required
-            value={email}
-            onChange={onChange}
-          />
-          <Input
-            name="password"
-            type="password"
-            placeholder="Password"
-            required
-            value={password}
-            onChange={onChange}
-          />
-          <SubmitButton type="submit">
-            {!newAccount ? "계정 만들기" : "들어가기"}
-          </SubmitButton>
-        </InputWrap>
+        {newAccount ? (
+          <InputWrap>
+            <Input
+              name="nickname"
+              type="text"
+              placeholder="닉네임"
+              required
+              value={nickname}
+              onChange={onChange}
+            />
+            <Input
+              name="email"
+              type="text"
+              placeholder="로그인할 때 사용할 이메일"
+              required
+              value={email}
+              onChange={onChange}
+            />
+            <Input
+              name="password"
+              type="password"
+              placeholder="비밀번호"
+              required
+              value={password}
+              onChange={onChange}
+            />
+            <Input
+              name="confirmPassword"
+              type="password"
+              placeholder="비밀번호 확인"
+              required
+              value={confirmPassword}
+              onChange={onChange}
+            />
+
+            <SubmitButton type="submit">계정 만들기</SubmitButton>
+          </InputWrap>
+        ) : (
+          <InputWrap>
+            <Input
+              name="email"
+              type="text"
+              placeholder="Email"
+              required
+              value={email}
+              onChange={onChange}
+            />
+            <Input
+              name="password"
+              type="password"
+              placeholder="Password"
+              required
+              value={password}
+              onChange={onChange}
+            />
+            <SubmitButton type="submit">들어가기</SubmitButton>
+          </InputWrap>
+        )}
+
         {error}
       </form>
       <SignToggle onClick={toggleAccount}>
-        {!newAccount ? "로그인하러 가기" : "회원가입하러 가기"}
+        {newAccount ? "로그인하러 가기" : "회원가입하러 가기"}
       </SignToggle>
       <SocialLogin />
     </Wrap>
