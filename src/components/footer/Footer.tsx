@@ -6,13 +6,15 @@ function Footer() {
     <Wrap>
       <FooterTop>
         <Img src={logo} />
-        <FooterItem>서비스소개</FooterItem>
-        <FooterItem>이용약관</FooterItem>
-        <FooterItem>고객센터</FooterItem>
+        <FooterItem>서비스소개 |</FooterItem>
+        <FooterItem>이용약관 |</FooterItem>
+        <FooterItem>고객센터 |</FooterItem>
         <FooterItem>개인정보 처리방침</FooterItem>
       </FooterTop>
       <FooterBottom>
-        <FooterItem>펫티어리 Petiary - Pet Diary</FooterItem>
+        <FooterItem>
+          펫티어리 Petiary - Pet Diary | icon by Smashicons
+        </FooterItem>
       </FooterBottom>
     </Wrap>
   );
@@ -21,7 +23,8 @@ function Footer() {
 export default Footer;
 
 const Wrap = styled.div`
-  height: 80px;
+  height: 180px;
+  border-top: 1px solid #c7c7c7;
   display: flex;
   flex-direction: column;
   align-items: center;
