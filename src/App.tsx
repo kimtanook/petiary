@@ -14,6 +14,7 @@ function App() {
   const paddingLeftRight = 32;
   const theme = {
     padding: `0 ${paddingLeftRight}px 0 ${paddingLeftRight}px`,
+    width: 475,
   };
   useEffect(() => {
     onAuthStateChanged(authService, (user) => {
