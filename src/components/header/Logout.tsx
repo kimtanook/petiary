@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import exitIcon from "../../img/icon/exit.png";
-import { Alert } from "../../util/atom";
+import { alertValue } from "../../util/atom";
 import { authService } from "../../util/firebase";
 
 function Logout() {
   const navigate = useNavigate();
-  const [alertModal, setAlertModal] = useRecoilState(Alert);
+  const [alertModal, setAlertModal] = useRecoilState(alertValue);
   const onClickLogout = () => {
     signOut(authService).then(() => {
       setAlertModal({
@@ -19,15 +19,19 @@ function Logout() {
     });
   };
   return (
-    <div>
+    <Wrap>
       {authService.currentUser ? (
         <LogoutImg src={exitIcon} onClick={onClickLogout} />
       ) : null}
-    </div>
+    </Wrap>
   );
 }
 
 export default Logout;
+
+const Wrap = styled.div`
+  display: flex;
+`;
 
 const LogoutImg = styled.img`
   cursor: pointer;
