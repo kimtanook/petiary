@@ -11,7 +11,7 @@ import styled from "styled-components";
 import profileIcon from "../../img/icon/profileicon.svg";
 import logo from "../../img/logo/logo-column.png";
 import { addUserData } from "../../util/api";
-import { Alert } from "../../util/atom";
+import { alertValue } from "../../util/atom";
 import { authService } from "../../util/firebase";
 import SocialLogin from "./SocialLogin";
 
@@ -22,7 +22,7 @@ const LoginAndSignUp = () => {
   const [newAccount, setNewAccount] = useState(false);
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState<any>("");
-  const [alertModal, setAlertModal] = useRecoilState(Alert);
+  const [alertModal, setAlertModal] = useRecoilState(alertValue);
   const { mutate: addUserInfo } = useMutation(addUserData);
   const navigate = useNavigate();
 
@@ -123,7 +123,8 @@ const LoginAndSignUp = () => {
             <Input
               name="nickname"
               type="text"
-              placeholder="닉네임"
+              placeholder="닉네임 최대 6글자"
+              maxLength={6}
               required
               value={nickname}
               onChange={onChange}
@@ -139,7 +140,8 @@ const LoginAndSignUp = () => {
             <Input
               name="password"
               type="password"
-              placeholder="비밀번호"
+              placeholder="비밀번호 6 ~ 12글자"
+              maxLength={12}
               required
               value={password}
               onChange={onChange}
