@@ -14,11 +14,10 @@ function PostList() {
   return (
     <div>
       {diaryPostData?.map((data: any) => (
-        <PostItemWrap>
+        <PostItemWrap key={uuidv4()}>
           <Link
             to={`/diary/${data.id}`}
             state={{ postData: data }}
-            key={uuidv4()}
             style={{ textDecoration: "none", color: "black" }}
           >
             <div>{data.title}</div>
