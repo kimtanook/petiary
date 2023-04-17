@@ -1,12 +1,17 @@
 import {
+  DocumentData,
+  QueryDocumentSnapshot,
   addDoc,
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
+  limit,
   orderBy,
   query,
   setDoc,
+  startAfter,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -17,22 +22,77 @@ import { dbService, storageService } from "./firebase";
 export const addUserData = async (data: any) => {
   setDoc(doc(dbService, `user/${data.uid}`), data);
 };
-// 전체공개 다이어리 포스트 가져오기
-export const getOpenDiaryPost = async () => {
+
+// 특정 유저 정보 가져오기
+export const getUserData = async ({ queryKey }: any) => {
+  const [_, userUid] = queryKey;
+  const docRef = doc(dbService, "user", userUid);
+  const docData = await getDoc(docRef);
+
+  return docData.data();
+};
+
+// 유저 정보 수정
+export const editProfileImage = async (data: any) => {
+  updateDoc(doc(dbService, `user/${data.uid}`), data);
+};
+
+// 전체 유저 정보 가져오기
+export const getAllUserData = async () => {
   const response: any = [];
 
-  const q = query(
-    collection(dbService, "diary"),
-    where("open", "==", true),
-    orderBy("createdAt", "desc")
-  );
-
-  const querySnapshot = await getDocs(q);
+  const querySnapshot = await getDocs(collection(dbService, "user"));
   querySnapshot.forEach((doc) => {
-    response.push({ id: doc.id, ...doc.data() });
+    response.push({ ...doc.data() });
   });
 
   return response;
+};
+
+// 전체공개 다이어리 포스트 가져오기
+
+let lastVisible: QueryDocumentSnapshot<DocumentData> | number | undefined =
+  undefined;
+export const visibleReset = () => {
+  // 리셋을 해주지 않으면 새로고침 전까지 lastVisible이 querySnapshot.docs.length로 유지됨
+  // 그로 인해, 페이지 이동 후 돌아오면 다음 페이지부터 보여주므로 기존 데이터 날아감.
+  lastVisible = undefined;
+};
+export const getOpenDiaryPost = async () => {
+  const getData: { [key: string]: string }[] = [];
+  let q;
+
+  if (lastVisible === -1) {
+    return;
+  } else {
+    if (lastVisible) {
+      q = query(
+        collection(dbService, "diary"),
+        where("open", "==", true),
+        orderBy("createdAt", "desc"),
+        limit(2),
+        startAfter(lastVisible)
+      );
+    } else {
+      q = query(
+        collection(dbService, "diary"),
+        where("open", "==", true),
+        orderBy("createdAt", "desc"),
+        limit(4)
+      );
+    }
+  }
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    getData.push({ id: doc.id, ...doc.data() });
+    if (querySnapshot.docs.length === 0) {
+      lastVisible = -1;
+    } else {
+      lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+    }
+  });
+
+  return getData;
 };
 // 내 다이어리 포스트 가져오기
 export const getDiaryPost = async ({ queryKey }: any) => {
