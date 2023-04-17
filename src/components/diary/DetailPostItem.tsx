@@ -45,6 +45,7 @@ function DetailPostItem({ postData }: any) {
     }
   );
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (urlResult === "/diary") {
       if (uid !== postData.uid) {
         navigate("/main");
