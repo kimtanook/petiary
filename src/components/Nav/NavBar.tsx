@@ -41,12 +41,14 @@ const ItemBox = styled.div`
   display: flex;
   justify-content: left;
   align-items: center;
+  overflow-x: scroll;
 `;
 const CategoryItem = styled.button<{ location: any; value: any }>`
   cursor: pointer;
   margin: 8px;
   border: none;
   font-size: 16px;
+  font-weight: 700;
   color: ${(props) => (props.location === props.value ? "white" : "black")};
   background-color: ${(props) =>
     props.location === props.value ? "#feb638" : "inherit"};
