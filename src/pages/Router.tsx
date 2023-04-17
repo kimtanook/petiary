@@ -53,10 +53,8 @@ const Wrap = styled.div`
   align-items: center;
   width: 100vw;
   min-height: 100vh;
+  background-color: wheat;
 `;
 const ContentWrap = styled.div`
   padding: 32px 32px 32px 32px;
-  background-color: wheat;
-  width: 80vw;
-  min-height: 100vh;
 `;
