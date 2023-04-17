@@ -1,5 +1,11 @@
+import Profile from "../../components/mypage/Profile";
+
 function MyPage() {
-  return <div>MyPage</div>;
+  return (
+    <div>
+      <Profile />
+    </div>
+  );
 }
 
 export default MyPage;
