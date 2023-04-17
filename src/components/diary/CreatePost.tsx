@@ -216,7 +216,9 @@ const CreatePost = () => {
 
 export default CreatePost;
 
-const Wrap = styled.div``;
+const Wrap = styled.div`
+  width: 70vw;
+`;
 
 const BackButton = styled.div`
   cursor: pointer;
