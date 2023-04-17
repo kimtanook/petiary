@@ -1,10 +1,10 @@
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import alertImg from "../../img/alert/alert.png";
-import { Alert } from "../../util/atom";
+import { alertValue } from "../../util/atom";
 
 function AlertModal({ alertModal }: any) {
-  const [customAlert, setCustomAlert] = useRecoilState(Alert);
+  const [customAlert, setCustomAlert] = useRecoilState(alertValue);
   return (
     <Wrap>
       <Box>
