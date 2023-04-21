@@ -10,7 +10,7 @@ function NavBar() {
 
   const categories = [
     { pathname: "/main", value: "main", name: "메인" },
-    { pathname: "/diary", value: "diary", name: "다이어리" },
+    { pathname: "/diary", value: "diary", name: "일기" },
     { pathname: "/todo", value: "todo", name: "할 일" },
     { pathname: "/calendar", value: "calendar", name: "캘린더" },
   ];
@@ -32,7 +32,7 @@ function NavBar() {
 export default NavBar;
 
 const Wrap = styled.div`
-  background-color: #f5efdc;
+  border-bottom: 1px solid #c7c7c7;
   height: 60px;
   display: flex;
   padding: ${({ theme }) => theme.padding};
@@ -42,21 +42,22 @@ const ItemBox = styled.div`
   justify-content: left;
   align-items: center;
   overflow-x: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const CategoryItem = styled.button<{ location: any; value: any }>`
   cursor: pointer;
   margin: 8px;
   border: none;
   font-size: 16px;
-  font-weight: 700;
-  color: ${(props) => (props.location === props.value ? "white" : "black")};
+  font-weight: 600;
   background-color: ${(props) =>
-    props.location === props.value ? "#feb638" : "inherit"};
-  border-radius: 8px;
+    props.location === props.value ? "#b71d51" : "inherit"};
+  color: ${(props) => (props.location === props.value ? "white" : "black")};
   width: 100px;
   height: 32px;
   :hover {
-    background-color: #fccd7d;
-    color: white;
+    background-color: #ffe3f3;
   }
 `;

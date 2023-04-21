@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import logo from "../../img/logo/logo-row2.png";
+import logo from "../../img/logo/logo.png";
 
 function Footer() {
   return (
@@ -35,6 +35,9 @@ const FooterTop = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: 450px) {
+    flex-direction: column;
+  }
 `;
 const Img = styled.img`
   height: 32px;

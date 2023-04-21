@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import profileIcon from "../../img/icon/profileicon.svg";
-import logo from "../../img/logo/logo-column.png";
+import logo from "../../img/logo/logo.png";
 import { addUserData } from "../../util/api";
 import { alertValue } from "../../util/atom";
 import { authService } from "../../util/firebase";
@@ -59,6 +59,9 @@ const LoginAndSignUp = () => {
               uid: authService.currentUser?.uid,
               userName: nickname,
               userImg: profileIcon,
+              userBirth: "",
+              userType: "",
+              userGender: "",
             };
             addUserInfo(userInfo);
             setAlertModal({
@@ -116,7 +119,10 @@ const LoginAndSignUp = () => {
   return (
     <Wrap>
       <LandingTitle>펫티어리로 반려동물의 추억을 남겨보세요!</LandingTitle>
-      <LogoImg src={logo} alt="logo" />
+      <LogoBox>
+        <LogoImg src={logo} alt="logo" />
+        <LogoTitle>PETIARY</LogoTitle>
+      </LogoBox>
       <form onSubmit={onSubmit}>
         {newAccount ? (
           <InputWrap>
@@ -203,11 +209,23 @@ const Wrap = styled.div`
 `;
 const LandingTitle = styled.div`
   font-size: 16px;
+  font-weight: 500;
   margin-bottom: 40px;
+  color: #4f1760;
+`;
+const LogoBox = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 const LogoImg = styled.img`
   width: 200px;
   height: 200px;
+`;
+const LogoTitle = styled.div`
+  font-size: 48px;
+  font-weight: 700;
+  text-align: center;
+  color: #b71d51;
 `;
 const InputWrap = styled.div`
   display: flex;
@@ -219,7 +237,7 @@ const Input = styled.input`
   height: 32px;
   margin: 4px;
   border-radius: 16px;
-  border: 1px solid #ff9524;
+  border: 1px solid #b71d51;
   padding-left: 8px;
 `;
 const SubmitButton = styled.button`
@@ -230,11 +248,11 @@ const SubmitButton = styled.button`
   border-radius: 8px;
   margin: 4px;
   color: white;
-  background-color: #ffcb88;
+  background-color: #b71d51;
   transition: 0.5s;
   :hover {
     transition: 0.5s;
-    background-color: #c8873c;
+    background-color: #4f1760;
   }
 `;
 const SignToggle = styled.div`
@@ -245,7 +263,7 @@ const SignToggle = styled.div`
   height: 24px;
   line-height: 24px;
   text-align: center;
-  background-color: #b56d3d;
+  background-color: #601e75;
   color: white;
   font-size: 12px;
 `;

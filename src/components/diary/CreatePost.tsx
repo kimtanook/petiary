@@ -10,7 +10,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
-import { createDiaryPost, updateDiaryPost } from "../../util/api";
+import {
+  createDiaryPost,
+  myPostLastVisibleReset,
+  openPostLastVisibleReset,
+  updateDiaryPost,
+} from "../../util/api";
 import { mdPostState } from "../../util/atom";
 import { authService, storageService } from "../../util/firebase";
 
@@ -22,19 +27,23 @@ const CreatePost = () => {
   const [diaryTitle, setDiaryTitle] = useState("");
   const [openValue, setOpenValue] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+  const resetFunction = () => {
+    myPostLastVisibleReset();
+    openPostLastVisibleReset();
+    queryClient.invalidateQueries(["getMyDiaryPost"]);
+    queryClient.invalidateQueries(["getOpenDiaryPost"]);
+  };
   const { mutate: createPost } = useMutation(createDiaryPost, {
     onSuccess: () => {
       setTimeout(() => {
-        queryClient.invalidateQueries(["diaryData"]);
-        queryClient.invalidateQueries(["getOpenDiaryPost"]);
+        resetFunction();
       }, 300);
     },
   });
   const { mutate: updatePost } = useMutation(updateDiaryPost, {
     onSuccess: () => {
       setTimeout(() => {
-        queryClient.invalidateQueries(["diaryData"]);
-        queryClient.invalidateQueries(["getOpenDiaryPost"]);
+        resetFunction();
       }, 300);
     },
   });
@@ -62,7 +71,7 @@ const CreatePost = () => {
           getDownloadURL(response.ref).then((url) => {
             setMdContent((prevMd) =>
               prevMd.concat(
-                `<p align="center"><img src='${url}' width="400" height="400"></p>`
+                `<p align="center"><img src='${url}' width="300"></p>`
               )
             );
           })
@@ -111,6 +120,7 @@ const CreatePost = () => {
     if (location.state) {
       setDiaryTitle(location.state.title);
       setMdContent(location.state.content);
+      setOpenValue(location.state.open);
     }
   }, []);
 
@@ -127,15 +137,26 @@ const CreatePost = () => {
       <TitleInput
         onChange={onChangeTitle}
         defaultValue={diaryTitle}
-        placeholder="제목을 입력해주세요."
+        placeholder="제목 (최대 16글자)"
+        maxLength={16}
       />
       <OpenValueBox onChange={onChangeOpenValue}>
         <OpenValue>
-          <input type="radio" name="openValue" value="비공개" />
+          <input
+            type="radio"
+            name="openValue"
+            value="비공개"
+            checked={openValue === false ? true : false}
+          />
           비공개 일기
         </OpenValue>
         <OpenValue>
-          <input type="radio" name="openValue" value="공개" />
+          <input
+            type="radio"
+            name="openValue"
+            value="공개"
+            checked={openValue === true ? true : false}
+          />
           공개 일기
         </OpenValue>
       </OpenValueBox>
@@ -266,12 +287,11 @@ const CloseBtn = styled.button`
 `;
 const SubmitButton = styled.button`
   cursor: pointer;
-  background-color: #ffb06f;
+  background-color: #4f1760;
   color: white;
   border: none;
   width: 100px;
   height: 32px;
-  border-radius: 12px;
   font-size: 16px;
   margin: 4px;
 `;

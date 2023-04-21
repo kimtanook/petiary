@@ -58,7 +58,7 @@ const Wrap = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px solid #ff952477;
+  border: 1px solid #b71d51;
   border-radius: 8px;
   padding: 0 8px 0 4px;
   margin-top: 40px;

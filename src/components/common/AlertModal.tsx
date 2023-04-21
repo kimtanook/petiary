@@ -29,12 +29,14 @@ function AlertModal({ alertModal }: any) {
 
 export default AlertModal;
 const Wrap = styled.div`
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100vw;
   height: 100vh;
+  background-color: #0000005d;
+  backdrop-filter: blur(10px);
 `;
 const Box = styled.div`
   position: absolute;
@@ -43,7 +45,10 @@ const Box = styled.div`
   transform: translate(-50%, -50%);
   width: 300px;
   height: 160px;
-  background-color: #ffe4c3;
+  background-color: #ce9ab8;
+  color: white;
+  font-size: 24px;
+  font-weight: 500;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -64,7 +69,7 @@ const CloseButton = styled.div`
   height: 20px;
   line-height: 20px;
   color: white;
-  background-color: #c58a25;
+  background-color: #641c5e;
   text-align: center;
   border-radius: 8px;
   font-size: 12px;

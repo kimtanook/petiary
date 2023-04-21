@@ -13,9 +13,15 @@ function Loading() {
 
 export default Loading;
 const Wrap = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
   width: 100vw;
   height: 100vh;
-  background-color: rgb(199 203 204);
+  background-color: #3b297133;
+  backdrop-filter: blur(4px);
 `;
 const LoadingBox = styled.div`
   position: absolute;
