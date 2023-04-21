@@ -50,35 +50,37 @@ export const getAllUserData = async () => {
 };
 
 // 전체공개 다이어리 포스트 가져오기
-
-let lastVisible: QueryDocumentSnapshot<DocumentData> | number | undefined =
-  undefined;
-export const visibleReset = () => {
+let openPostLastVisible:
+  | QueryDocumentSnapshot<DocumentData>
+  | number
+  | undefined = undefined;
+export const openPostLastVisibleReset = () => {
   // 리셋을 해주지 않으면 새로고침 전까지 lastVisible이 querySnapshot.docs.length로 유지됨
   // 그로 인해, 페이지 이동 후 돌아오면 다음 페이지부터 보여주므로 기존 데이터 날아감.
-  lastVisible = undefined;
+  openPostLastVisible = undefined;
 };
+
 export const getOpenDiaryPost = async () => {
   const getData: { [key: string]: string }[] = [];
   let q;
 
-  if (lastVisible === -1) {
+  if (openPostLastVisible === -1) {
     return;
   } else {
-    if (lastVisible) {
+    if (openPostLastVisible) {
       q = query(
         collection(dbService, "diary"),
         where("open", "==", true),
         orderBy("createdAt", "desc"),
-        limit(2),
-        startAfter(lastVisible)
+        limit(4),
+        startAfter(openPostLastVisible)
       );
     } else {
       q = query(
         collection(dbService, "diary"),
         where("open", "==", true),
         orderBy("createdAt", "desc"),
-        limit(4)
+        limit(8)
       );
     }
   }
@@ -86,32 +88,63 @@ export const getOpenDiaryPost = async () => {
   querySnapshot.forEach((doc) => {
     getData.push({ id: doc.id, ...doc.data() });
     if (querySnapshot.docs.length === 0) {
-      lastVisible = -1;
+      openPostLastVisible = -1;
     } else {
-      lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+      openPostLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
     }
   });
 
   return getData;
 };
+
 // 내 다이어리 포스트 가져오기
-export const getDiaryPost = async ({ queryKey }: any) => {
+let myPostLastVisible:
+  | QueryDocumentSnapshot<DocumentData>
+  | number
+  | undefined = undefined;
+export const myPostLastVisibleReset = () => {
+  // 리셋을 해주지 않으면 새로고침 전까지 lastVisible이 querySnapshot.docs.length로 유지됨
+  // 그로 인해, 페이지 이동 후 돌아오면 다음 페이지부터 보여주므로 기존 데이터 날아감.
+  myPostLastVisible = undefined;
+};
+export const getMyDiaryPost = async ({ queryKey }: any) => {
   const [_, uid] = queryKey;
-  const response: any = [];
+  const getData: { [key: string]: string }[] = [];
+  let q;
 
-  const q = query(
-    collection(dbService, "diary"),
-    where("uid", "==", uid),
-    orderBy("createdAt", "desc")
-  );
-
+  if (myPostLastVisible === -1) {
+    return;
+  } else {
+    if (myPostLastVisible) {
+      q = query(
+        collection(dbService, "diary"),
+        where("uid", "==", uid),
+        orderBy("createdAt", "desc"),
+        limit(4),
+        startAfter(myPostLastVisible)
+      );
+    } else {
+      q = query(
+        collection(dbService, "diary"),
+        where("uid", "==", uid),
+        orderBy("createdAt", "desc"),
+        limit(8)
+      );
+    }
+  }
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-    response.push({ id: doc.id, ...doc.data() });
+    getData.push({ id: doc.id, ...doc.data() });
+    if (querySnapshot.docs.length === 0) {
+      myPostLastVisible = -1;
+    } else {
+      myPostLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+    }
   });
 
-  return response;
+  return getData;
 };
+
 // 다이어리 포스트 저장
 export const createDiaryPost = async (data: any) => {
   addDoc(collection(dbService, "diary"), data);
@@ -133,4 +166,20 @@ export const deleteDiaryPostImage = ({ imageUrl }: any) => {
     .catch((error) => {
       console.log("error : ", error);
     });
+};
+
+// 캘린더 일정 저장
+export const createSchedule = async (data: any) => {
+  addDoc(collection(dbService, `calendar`), data);
+};
+// 캘린더 일정 가져오기
+export const getSchedule = async ({ queryKey }: any) => {
+  const [_, uid] = queryKey;
+  const response: any = [];
+  const q = query(collection(dbService, "calendar"), where("uid", "==", uid));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    response.push({ id: doc.id, ...doc.data() });
+  });
+  return response;
 };
