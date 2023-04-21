@@ -13,3 +13,7 @@ export const editProfileValue = atom({
   key: `editProfileValue${uuidv4()}`,
   default: false,
 });
+export const leftCategoryValue = atom({
+  key: `leftCategoryValue${uuidv4()}`,
+  default: "",
+});
