@@ -10,11 +10,9 @@ function CalendarDayItem({ day, scheduleData }: any) {
     day,
     "d"
   )}`;
-  console.log("day : ", day);
   const sameDayData = scheduleData.filter(
     (item: any) => item.scheduleDay === scheduleDay
   );
-  console.log("sameDayData : ", sameDayData);
   const [modalToggle, setModalToggle] = useState(false);
   const [scheduleValue, setScheduleVale] = useState("");
   const data = {
