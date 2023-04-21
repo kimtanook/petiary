@@ -1,13 +1,14 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Layout from "../components/Layout";
 import NavBar from "../components/Nav/NavBar";
 import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
+import LeftCategory from "../components/left_category/LeftCategory";
 import { authService } from "../util/firebase";
-import Calendar from "./Calendar";
 import Landing from "./Landing";
 import Todo from "./Todo";
+import Calendar from "./calendar/Calendar";
 import DetailPost from "./diary/DetailPost";
 import Diary from "./diary/Diary";
 import PostForm from "./diary/PostForm";
@@ -16,6 +17,9 @@ import MyPage from "./mypage/MyPage";
 
 const AppRouter = () => {
   const user = authService.currentUser;
+  const location = useLocation();
+  const categoryTrue = location.pathname;
+
   return (
     <>
       {user ? (
@@ -24,7 +28,10 @@ const AppRouter = () => {
           <NavBar />
         </>
       ) : null}
-      <Wrap>
+      <Wrap categoryTrue={categoryTrue}>
+        {categoryTrue === "/diary" || categoryTrue === "/diary/write" ? (
+          <LeftCategory />
+        ) : null}
         <ContentWrap>
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -47,14 +54,24 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
-const Wrap = styled.div`
+const Wrap = styled.div<{ categoryTrue: string }>`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  background-color: ${(props) =>
+    props.categoryTrue === "/" ? "#f4d8e9" : "white"};
   width: 100vw;
   min-height: 100vh;
-  background-color: wheat;
+  @media screen and (max-width: 450px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 const ContentWrap = styled.div`
   padding: 32px 32px 32px 32px;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  @media screen and (max-width: 450px) {
+    padding: inherit;
+  }
 `;
