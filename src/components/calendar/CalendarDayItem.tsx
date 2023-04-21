@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useState } from "react";
 import styled from "styled-components";
@@ -6,11 +7,13 @@ import { authService } from "../../util/firebase";
 
 function CalendarDayItem({ day, scheduleData }: any) {
   const user = authService.currentUser;
+  const queryClient = useQueryClient();
+  const { mutate: scheduleMutate } = useMutation(createSchedule);
   const scheduleDay = `${format(day, "yyyy")}${format(day, "M")}${format(
     day,
     "d"
   )}`;
-  const sameDayData = scheduleData.filter(
+  const sameDayData = scheduleData?.filter(
     (item: any) => item.scheduleDay === scheduleDay
   );
   const [modalToggle, setModalToggle] = useState(false);
@@ -21,7 +24,10 @@ function CalendarDayItem({ day, scheduleData }: any) {
     content: scheduleValue,
   };
   const saveSchedule = () => {
-    createSchedule(data);
+    scheduleMutate(data, {
+      onSuccess: () =>
+        setTimeout(() => queryClient.invalidateQueries(["scheduleData"]), 300),
+    });
     setScheduleVale("");
     setModalToggle(false);
   };
