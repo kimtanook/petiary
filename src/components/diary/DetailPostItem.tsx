@@ -3,6 +3,8 @@ import MDEditor from "@uiw/react-md-editor";
 import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import deleteImg from "../../img/icon/trash.png";
+import editImg from "../../img/icon/write.png";
 import { deleteDiaryPost, deleteDiaryPostImage } from "../../util/api";
 import { authService } from "../../util/firebase";
 
@@ -46,12 +48,14 @@ function DetailPostItem({ postData }: any) {
   );
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (urlResult === "/diary") {
-      if (uid !== postData.uid) {
+    if (urlResult === "/main") {
+      if (!postData.open) {
+        alert("비공개글에는 접근할 수 없습니다.");
         navigate("/main");
       }
     }
   }, []);
+
   return (
     <Wrap>
       <TitleBox>
@@ -59,20 +63,24 @@ function DetailPostItem({ postData }: any) {
       </TitleBox>
       <SubWrap>
         <DayBox>
-          {postData.userName} · {day}
+          {postData.userName} · {day} · {postData.open ? "공개글" : "비공개글"}
         </DayBox>
         {uid === postData.uid ? (
           <EditDeleteWrap>
-            <EditBox>
+            <EditButton>
               <Link
                 to={`/diary/write/${postData.id}`}
                 state={postData}
                 style={{ textDecoration: "none", color: "black" }}
               >
-                수정하기
+                <EditDeleteImg src={editImg} alt="editImg" />
+                수정
               </Link>
-            </EditBox>
-            <DeleteButton onClick={deleteButton}>삭제하기</DeleteButton>
+            </EditButton>
+            <DeleteButton onClick={deleteButton}>
+              <EditDeleteImg src={deleteImg} alt="deleteImg" />
+              삭제
+            </DeleteButton>
           </EditDeleteWrap>
         ) : null}
       </SubWrap>
@@ -84,43 +92,71 @@ function DetailPostItem({ postData }: any) {
 }
 
 export default DetailPostItem;
-const Wrap = styled.div`
+const Wrap = styled.div<{ theme: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 60vw;
+  padding: 12px;
+  @media screen and (max-width: ${({ theme }) => theme.width}px) {
+    width: 100vw;
+  }
 `;
+
 const SubWrap = styled.div`
+  width: 90%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  width: 70vw;
-  height: 24px;
+  white-space: nowrap;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const DayBox = styled.div``;
 const EditDeleteWrap = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 8px;
 `;
-const EditBox = styled.div`
+const EditButton = styled.div`
   cursor: pointer;
   margin-right: 16px;
   font-size: 16px;
+  opacity: 0.5;
+  :hover {
+    opacity: 1;
+  }
+`;
+const EditDeleteImg = styled.img`
+  width: 12px;
+  margin-right: 4px;
 `;
 const DeleteButton = styled.div`
   cursor: pointer;
   border: none;
   background-color: inherit;
   font-size: 16px;
+  opacity: 0.5;
+  :hover {
+    opacity: 1;
+  }
 `;
 const TitleBox = styled.div`
-  width: 70vw;
+  width: 90%;
   height: 48px;
   font-size: 32px;
   padding: 10px 40px 0 40px;
+  white-space: nowrap;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const ContentBox = styled.div`
-  width: 70vw;
+  width: 90%;
   padding: 32px 40px 32px 40px;
   background-color: white;
 `;
