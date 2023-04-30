@@ -183,3 +183,7 @@ export const getSchedule = async ({ queryKey }: any) => {
   });
   return response;
 };
+// 캘린더 일정 삭제
+export const deleteSchedule = async (id: any) => {
+  deleteDoc(doc(dbService, `calendar/${id}`));
+};
