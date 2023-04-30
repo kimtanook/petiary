@@ -1,14 +1,17 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import moreBtnImg from "../../img/icon/angle-down.png";
 import { getMyDiaryPost } from "../../util/api";
+import { transformListValue } from "../../util/atom";
 import { authService } from "../../util/firebase";
 import Loading from "../common/Loading";
 import DiaryOpenPost from "./DiaryPostItem";
 
 function PostList() {
+  const transformListToggle = useRecoilValue(transformListValue);
   const uid = authService.currentUser?.uid;
 
   // 무한 스크롤
@@ -34,7 +37,7 @@ function PostList() {
         <Loading />
       ) : (
         <>
-          <GridWrap>
+          <GridWrap transformListToggle={transformListToggle}>
             {myPost?.pages.map((page: any) =>
               page.map((item: any) => (
                 <Link
@@ -70,23 +73,29 @@ export default PostList;
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
-const GridWrap = styled.div`
+const GridWrap = styled.div<{ transformListToggle: boolean }>`
+  ${({ transformListToggle }) =>
+    !transformListToggle
+      ? `
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-
-  @media screen and (min-width: 375px) {
+  @media screen and (min-width: 300px) {
     grid-template-columns: repeat(1, 1fr);
   }
-  @media screen and (min-width: 960px) {
+  @media screen and (min-width: 600px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @media screen and (min-width: 1304px) {
+  @media screen and (min-width: 900px) {
     grid-template-columns: repeat(3, 1fr);
   }
-  @media screen and (min-width: 1660px) {
+  @media screen and (min-width: 1200px) {
     grid-template-columns: repeat(4, 1fr);
   }
+`
+      : `display: flex;
+      flex-direction: column;
+  }`}
 `;
 const MoreBtn = styled.div`
   cursor: pointer;
