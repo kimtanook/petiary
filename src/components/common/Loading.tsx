@@ -20,7 +20,7 @@ const Wrap = styled.div`
   z-index: 10;
   width: 100vw;
   height: 100vh;
-  background-color: #3b297133;
+  background-color: #cecece33;
   backdrop-filter: blur(4px);
 `;
 const LoadingBox = styled.div`
