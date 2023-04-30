@@ -45,10 +45,11 @@ const Box = styled.div`
   transform: translate(-50%, -50%);
   width: 300px;
   height: 160px;
-  background-color: #ce9ab8;
-  color: white;
+  background-color: white;
+  color: black;
   font-size: 24px;
   font-weight: 500;
+  border: 3px solid #ce9ab8;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
