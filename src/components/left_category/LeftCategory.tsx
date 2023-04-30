@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import WriteImg from "../../img/icon/write.png";
+import WriteImg from "../../img/icon/book.png";
 import { leftCategoryValue } from "../../util/atom";
 
 function LeftCategory() {
@@ -23,49 +23,34 @@ function LeftCategory() {
               name="write"
               onClick={() => setSelectCategory("write")}
             >
-              <Write src={WriteImg} />
+              <WriteImgBox src={WriteImg} />
               일기 쓰기
             </ItemBox>
           </Link>
-          <div>
-            <ItemBox select={selectCategory} name="1">
-              준비중
-            </ItemBox>
-          </div>
-          <div>
-            <ItemBox select={selectCategory} name="2">
-              준비중
-            </ItemBox>
-          </div>
-          <div>
-            <ItemBox select={selectCategory} name="3">
-              준비중
-            </ItemBox>
-          </div>
+          <ItemBox select={selectCategory} name="1">
+            준비중
+          </ItemBox>
+          <ItemBox select={selectCategory} name="2">
+            준비중
+          </ItemBox>
+          <ItemBox select={selectCategory} name="3">
+            준비중
+          </ItemBox>
         </CategoryBox>
       ) : (
         <CategoryBox>
-          <div>
-            <ItemBox select={selectCategory} name="1">
-              준비중
-            </ItemBox>
-          </div>
-
-          <div>
-            <ItemBox select={selectCategory} name="2">
-              준비중
-            </ItemBox>
-          </div>
-          <div>
-            <ItemBox select={selectCategory} name="3">
-              준비중
-            </ItemBox>
-          </div>
-          <div>
-            <ItemBox select={selectCategory} name="4">
-              준비중
-            </ItemBox>
-          </div>
+          <ItemBox select={selectCategory} name="1">
+            준비중
+          </ItemBox>
+          <ItemBox select={selectCategory} name="2">
+            준비중
+          </ItemBox>
+          <ItemBox select={selectCategory} name="3">
+            준비중
+          </ItemBox>
+          <ItemBox select={selectCategory} name="4">
+            준비중
+          </ItemBox>
         </CategoryBox>
       )}
     </Wrap>
@@ -73,56 +58,43 @@ function LeftCategory() {
 }
 
 export default LeftCategory;
+
 const Wrap = styled.div`
-  position: sticky;
-  top: 0px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 200px;
-  border-right: 1px solid #c7c7c7;
-  margin-top: 16px;
-  height: 98vh;
-  @media screen and (max-width: 450px) {
-    justify-content: center;
-    position: relative;
-    width: inherit;
-    height: 60px;
+  margin: auto;
+  overflow-x: scroll;
+  ::-webkit-scrollbar {
+    display: none;
   }
+  max-width: 500px;
+  display: flex;
+  margin-top: 8px;
 `;
 const CategoryBox = styled.div`
-  margin-top: 12px;
-  @media screen and (max-width: 450px) {
-    overflow: scroll;
-    width: 100vw;
-    height: 40px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    ::-webkit-scrollbar {
-      display: none;
-    }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  ::-webkit-scrollbar {
+    display: none;
   }
 `;
 const ItemBox = styled.div<{ select: string; name: string }>`
   cursor: pointer;
-  background-color: ${(props) =>
-    props.select === props.name ? "#ffb5ce" : "white"};
   color: "black";
+  border-bottom: 3px solid
+    ${(props) => (props.select === props.name ? "#b71d51" : "white")};
   margin: 8px;
-  padding-left: 12px;
   font-weight: 600;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 130px;
-  height: 36px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 36px;
   :hover {
     background-color: #ffe3f3;
   }
 `;
-const Write = styled.img`
+const WriteImgBox = styled.img`
   width: 20px;
   height: 20px;
   margin-right: 8px;
