@@ -28,10 +28,10 @@ const AppRouter = () => {
           <NavBar />
         </>
       ) : null}
-      <Wrap categoryTrue={categoryTrue}>
-        {categoryTrue === "/diary" || categoryTrue === "/diary/write" ? (
-          <LeftCategory />
-        ) : null}
+      {categoryTrue === "/diary" || categoryTrue === "/diary/write" ? (
+        <LeftCategory />
+      ) : null}
+      <Container categoryTrue={categoryTrue}>
         <ContentWrap>
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -46,7 +46,7 @@ const AppRouter = () => {
             <Route path="/my-page" element={<MyPage />} />
           </Routes>
         </ContentWrap>
-      </Wrap>
+      </Container>
       {user ? <Footer /> : null}
       <Layout />
     </>
@@ -54,13 +54,13 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
-const Wrap = styled.div<{ categoryTrue: string }>`
+
+const Container = styled.div<{ categoryTrue: string }>`
   display: flex;
-  flex-direction: row;
-  background-color: ${(props) =>
-    props.categoryTrue === "/" ? "#f4d8e9" : "white"};
-  width: 100vw;
+  flex-direction: column;
   min-height: 100vh;
+  max-width: 1060px;
+  margin: auto;
   @media screen and (max-width: 450px) {
     flex-direction: column;
     align-items: center;
@@ -68,7 +68,7 @@ const Wrap = styled.div<{ categoryTrue: string }>`
 `;
 const ContentWrap = styled.div`
   padding: 32px 32px 32px 32px;
-  width: 100vw;
+  max-width: 1060px;
   display: flex;
   justify-content: center;
   @media screen and (max-width: 450px) {
