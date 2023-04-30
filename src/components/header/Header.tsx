@@ -14,7 +14,7 @@ function Header() {
   return (
     <Wrap>
       <LogoBox>
-        <img src={Logo} alt="logo" height={50} />
+        <img src={Logo} alt="logo" height={36} />
         <LogoTitle>PETIARY</LogoTitle>
       </LogoBox>
       <HeaderRight>
@@ -27,6 +27,8 @@ function Header() {
 
 export default Header;
 const Wrap = styled.div`
+  max-width: 1060px;
+  margin: auto;
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: row;
@@ -44,10 +46,11 @@ const LogoBox = styled.div`
 `;
 const LogoTitle = styled.div`
   font-weight: 700;
-  font-size: 40px;
+  font-size: 32px;
   text-align: center;
   margin-left: 4px;
   height: 40px;
+  line-height: 44px;
   color: #b71d51;
 `;
 const HeaderRight = styled.div`
