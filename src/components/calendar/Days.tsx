@@ -4,15 +4,16 @@ import {
   endOfMonth,
   endOfWeek,
   format,
+  isSameMonth,
   startOfMonth,
   startOfWeek,
 } from "date-fns";
 import styled from "styled-components";
 import { getSchedule } from "../../util/api";
 import { authService } from "../../util/firebase";
-import CalendarDayItem from "./CalendarDayItem";
+import DayItem from "./DayItem";
 
-function CalendarDays({ currentDate, selectDate, onClickDate }: any) {
+function CalendarDays({ currentDate }: any) {
   const user = authService.currentUser;
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(monthStart);
@@ -32,9 +33,13 @@ function CalendarDays({ currentDate, selectDate, onClickDate }: any) {
     for (let i = 0; i < 7; i++) {
       formatDate = format(day, "d");
       days.push(
-        <DayBox key={dayIndex}>
-          <Day day={day}>{formatDate}</Day>
-          <CalendarDayItem day={day} scheduleData={scheduleData} />
+        <DayBox key={dayIndex} day={day} monthStart={monthStart}>
+          <Day day={day} monthStart={monthStart}>
+            {formatDate}
+          </Day>
+          {isSameMonth(day, monthStart) ? (
+            <DayItem day={day} scheduleData={scheduleData} />
+          ) : null}
         </DayBox>
       );
       day = addDays(day, 1);
@@ -48,29 +53,37 @@ function CalendarDays({ currentDate, selectDate, onClickDate }: any) {
 }
 
 export default CalendarDays;
+
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
-  width: 800px;
+  width: 60vw;
+  max-width: 800px;
+  min-width: 360px;
 `;
 const Week = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 
-  margin: 20px 0 20px 0;
+  margin: 4px 0 4px 0;
 `;
-const DayBox = styled.div`
+const DayBox = styled.div<{ day: any; monthStart: any }>`
   width: 100px;
-  height: 140px;
-  border: 1px solid black;
+  height: 100px;
+  margin: 4px;
+  border-bottom: 1px solid
+    ${({ day, monthStart }) =>
+      !isSameMonth(day, monthStart) ? "white" : "#c6c6c6"};
 `;
-const Day = styled.div<{ day: any }>`
-  margin: 12px;
+const Day = styled.div<{ day: any; monthStart: any }>`
+  margin: 8px;
   width: 20px;
   text-align: center;
-  color: ${({ day }) =>
-    format(day, "EEE") === "Sun" || format(day, "EEE") === "Sat"
+  color: ${({ day, monthStart }) =>
+    !isSameMonth(day, monthStart)
+      ? "#d1d1d1"
+      : format(day, "EEE") === "Sun" || format(day, "EEE") === "Sat"
       ? "red"
       : "black"};
 `;
