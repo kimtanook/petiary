@@ -17,3 +17,7 @@ export const leftCategoryValue = atom({
   key: `leftCategoryValue${uuidv4()}`,
   default: "",
 });
+export const transformListValue = atom({
+  key: `transformListValue${uuidv4()}`,
+  default: false,
+});
