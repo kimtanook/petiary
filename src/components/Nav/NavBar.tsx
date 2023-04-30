@@ -32,6 +32,8 @@ function NavBar() {
 export default NavBar;
 
 const Wrap = styled.div`
+  max-width: 1060px;
+  margin: auto;
   border-bottom: 1px solid #c7c7c7;
   height: 60px;
   display: flex;
