@@ -1,28 +1,25 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
-import deleteImg from "../../img/icon/cross-small.png";
-import { deleteSchedule } from "../../util/api";
 
 function DaySchedule({ item }: any) {
-  const queryClient = useQueryClient();
-  const { mutate: deleteScheduleMutate } = useMutation(deleteSchedule);
+  // const queryClient = useQueryClient();
+  // const { mutate: deleteScheduleMutate } = useMutation(deleteSchedule);
 
-  const onClickDelete = () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      deleteScheduleMutate(item.id, {
-        onSuccess: () => {
-          setTimeout(
-            () => queryClient.invalidateQueries(["scheduleData"]),
-            300
-          );
-        },
-      });
-    }
-  };
+  // const onClickDelete = () => {
+  //   if (window.confirm("정말 삭제하시겠습니까?")) {
+  //     deleteScheduleMutate(item.id, {
+  //       onSuccess: () => {
+  //         setTimeout(
+  //           () => queryClient.invalidateQueries(["scheduleData"]),
+  //           300
+  //         );
+  //       },
+  //     });
+  //   }
+  // };
   return (
     <Wrap>
       <Content>{item.content}</Content>
-      <DeleteImg src={deleteImg} onClick={onClickDelete} />
+      {/* <DeleteImg src={deleteImg} onClick={onClickDelete} /> */}
     </Wrap>
   );
 }
