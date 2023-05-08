@@ -238,8 +238,9 @@ const CreatePost = () => {
 export default CreatePost;
 
 const Wrap = styled.div`
-  width: 60vw;
+  width: 80vw;
   min-width: 350px;
+  max-width: 1000px;
 `;
 
 const BackButton = styled.div`
