@@ -1,5 +1,4 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
@@ -40,14 +39,7 @@ function PostList() {
           <GridWrap transformListToggle={transformListToggle}>
             {myPost?.pages.map((page: any) =>
               page.map((item: any) => (
-                <Link
-                  to={`/diary/${item.id}`}
-                  state={{ postData: item }}
-                  key={uuidv4()}
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  <DiaryOpenPost item={item} />
-                </Link>
+                <DiaryOpenPost item={item} key={uuidv4()} />
               ))
             )}
           </GridWrap>
