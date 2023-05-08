@@ -1,19 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
 import noImage from "../../img/empty/no-image.png";
 import { getUserData } from "../../util/api";
 import { transformListValue } from "../../util/atom";
+import UserProfile from "../common/UserProfile";
 
 function DiaryPostItem({ item }: any) {
+  const location = useLocation();
+  const path = location.pathname;
+  const [userProfileToggle, setUserProfileToggle] = useState(false);
   const transformListToggle = useRecoilValue(transformListValue);
   const { data: userData } = useQuery(["getUserData", item?.uid], getUserData);
-  const day = new Date(item.createdAt! + 9 * 60 * 60 * 1000).toLocaleString(
-    "ko-KR",
-    {
-      timeZone: "UTC",
-    }
-  );
+  // const day = new Date(item.createdAt! + 9 * 60 * 60 * 1000).toLocaleString(
+  //   "ko-KR",
+  //   {
+  //     timeZone: "UTC",
+  //   }
+  // );
   const titleImg = item.content;
   const regex = /<img.*?src=['"](.*?)['"].*?>/i;
   const match = titleImg.match(regex);
@@ -22,32 +29,56 @@ function DiaryPostItem({ item }: any) {
     <>
       {transformListToggle ? (
         <WrapList>
-          <InfoBoxForList>
+          <InfoBoxForList
+            onClick={() => setUserProfileToggle(!userProfileToggle)}
+          >
             <PostUserImg src={userData?.userImg} />
             {userData?.userName}
           </InfoBoxForList>
-          <ContentBoxForList>
-            <ImageBoxForList urlImg={match ? match[1] : noImage} />
-            <PostTitleForListBox>
-              <PostTitleForList>{item.title}</PostTitleForList>
-            </PostTitleForListBox>
-          </ContentBoxForList>
+          <Link
+            to={`${path}/${item.id}`}
+            state={{ postData: item }}
+            key={uuidv4()}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ContentBoxForList>
+              <ImageBoxForList urlImg={match ? match[1] : noImage} />
+              <PostTitleForListBox>
+                <PostTitleForList>{item.title}</PostTitleForList>
+              </PostTitleForListBox>
+            </ContentBoxForList>
+          </Link>
         </WrapList>
       ) : (
         <Wrap>
-          <ImageBox urlImg={match ? match[1] : noImage} />
-          <TitleUserBox>
-            <PostTitle>{item.title}</PostTitle>
-            <InfoBox>
+          <Link
+            to={`${path}/${item.id}`}
+            state={{ postData: item }}
+            key={uuidv4()}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ImageBox urlImg={match ? match[1] : noImage} />
+            <PostTitleBox>
+              <PostTitle>{item.title}</PostTitle>
+            </PostTitleBox>
+          </Link>
+          <UserBox>
+            <InfoBox onClick={() => setUserProfileToggle(!userProfileToggle)}>
               <UserInfoBox>
                 <PostUserImg src={userData?.userImg} />
                 {userData?.userName}
               </UserInfoBox>
-              <div>{item.open === true ? "공개글" : "비공개글"}</div>
             </InfoBox>
-          </TitleUserBox>
+            <div>{item.open === true ? "공개글" : "비공개글"}</div>
+          </UserBox>
         </Wrap>
       )}
+      {userProfileToggle ? (
+        <UserProfile
+          userData={userData}
+          setUserProfileToggle={setUserProfileToggle}
+        />
+      ) : null}
     </>
   );
 }
@@ -92,8 +123,8 @@ const ImageBox = styled.div<{ urlImg: string }>`
   background-position: center;
   background-size: cover;
   border-radius: 12px 12px 0 0;
-  width: 100%;
-  height: 100%;
+  width: 200px;
+  height: 140px;
   margin: 8px 0 12px 0;
 `;
 const ImageBoxForList = styled.div<{ urlImg: string }>`
@@ -106,11 +137,17 @@ const ImageBoxForList = styled.div<{ urlImg: string }>`
   margin: 8px 0 12px 0;
 `;
 
-const TitleUserBox = styled.div`
+const UserBox = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   width: 90%;
   margin: auto;
+  color: gray;
+`;
+const PostTitleBox = styled.div`
+  width: 200px;
 `;
 const PostTitle = styled.div`
   font-size: 20px;
@@ -140,14 +177,14 @@ const InfoBox = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 40px;
-  color: gray;
+  cursor: pointer;
 `;
 const InfoBoxForList = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 130px;
-  color: gray;
+  cursor: pointer;
 `;
 const ContentBoxForList = styled.div`
   display: flex;
@@ -155,10 +192,7 @@ const ContentBoxForList = styled.div`
   align-items: center;
   justify-content: center;
 `;
-const DayBoxForList = styled.div`
-  font-size: 12px;
-  color: gray;
-`;
+
 const UserInfoBox = styled.div`
   display: flex;
   align-items: center;
