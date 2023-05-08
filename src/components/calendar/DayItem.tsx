@@ -10,10 +10,12 @@ import { createSchedule } from "../../util/api";
 import { alertValue } from "../../util/atom";
 import { authService } from "../../util/firebase";
 import DaySchedule from "./DaySchedule";
+import DetailScheduleModal from "./DetailScheduleModal";
 
 function DayItem({ day, scheduleData, monthStart }: any) {
   const user = authService.currentUser;
   const queryClient = useQueryClient();
+  const [detailModal, setDetailModal] = useState(false);
   const [alertModal, setAlertModal] = useRecoilState(alertValue);
   const [modalToggle, setModalToggle] = useState(false);
   const [scheduleValue, setScheduleVale] = useState("");
@@ -55,13 +57,22 @@ function DayItem({ day, scheduleData, monthStart }: any) {
   };
   return (
     <>
-      <Wrap>
+      <ScheduleWrap onClick={() => setDetailModal(!detailModal)}>
         {sameDayData?.map((item: any) => (
           <DaySchedule key={uuidv4()} item={item} />
         ))}
-      </Wrap>
-      <AddScheduleBtn onClick={() => setModalToggle(true)}>
-        <AddScheduleImg src={addScheduleImg} />
+      </ScheduleWrap>
+      {detailModal ? (
+        <DetailScheduleModal
+          setDetailModal={setDetailModal}
+          item={sameDayData}
+        />
+      ) : null}
+      <AddScheduleBtn>
+        <AddScheduleImg
+          src={addScheduleImg}
+          onClick={() => setModalToggle(true)}
+        />
       </AddScheduleBtn>
 
       {modalToggle ? (
@@ -84,15 +95,9 @@ function DayItem({ day, scheduleData, monthStart }: any) {
 }
 
 export default DayItem;
-const AddScheduleImg = styled.img`
-  width: 16px;
-  height: 16px;
-  opacity: 0.2;
-  :hover {
-    opacity: 1;
-  }
-`;
-const Wrap = styled.div`
+
+const ScheduleWrap = styled.div`
+  cursor: pointer;
   height: 40px;
   margin: 0px 4px 0px 4px;
   overflow-y: scroll;
@@ -101,10 +106,18 @@ const Wrap = styled.div`
   }
 `;
 const AddScheduleBtn = styled.div`
-  cursor: pointer;
   margin: 4px;
   display: flex;
   justify-content: right;
+`;
+const AddScheduleImg = styled.img`
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  opacity: 0.2;
+  :hover {
+    opacity: 1;
+  }
 `;
 const ModalWrap = styled.div`
   width: 100vw;
