@@ -17,7 +17,11 @@ export const leftCategoryValue = atom({
   key: `leftCategoryValue${uuidv4()}`,
   default: "",
 });
-export const transformListValue = atom({
-  key: `transformListValue${uuidv4()}`,
-  default: false,
+export const animalValue = atom({
+  key: `animalValue${uuidv4()}`,
+  default: "",
+});
+export const animalPageValue = atom({
+  key: `animalPageValue${uuidv4()}`,
+  default: "1",
 });
