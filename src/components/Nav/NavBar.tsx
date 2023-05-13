@@ -11,8 +11,8 @@ function NavBar() {
   const categories = [
     { pathname: "/main", value: "main", name: "메인" },
     { pathname: "/diary", value: "diary", name: "일기" },
-    { pathname: "/todo", value: "todo", name: "할 일" },
     { pathname: "/calendar", value: "calendar", name: "캘린더" },
+    { pathname: "/todo", value: "todo", name: "할 일" },
   ];
   return (
     <Wrap>
@@ -24,6 +24,17 @@ function NavBar() {
             </CategoryItem>
           </Link>
         ))}
+      </ItemBox>
+      <ItemBox>
+        <CategoryItem location={result} value="/shelter">
+          <Link
+            to="/shelter"
+            key={uuidv4()}
+            style={{ textDecorationLine: "none", color: "inherit" }}
+          >
+            보호 동물
+          </Link>
+        </CategoryItem>
       </ItemBox>
     </Wrap>
   );
@@ -37,6 +48,7 @@ const Wrap = styled.div`
   border-bottom: 1px solid #c7c7c7;
   height: 60px;
   display: flex;
+  justify-content: space-between;
   padding: ${({ theme }) => theme.padding};
 `;
 const ItemBox = styled.div`
@@ -59,6 +71,10 @@ const CategoryItem = styled.button<{ location: any; value: any }>`
   color: ${(props) => (props.location === props.value ? "white" : "black")};
   width: 100px;
   height: 32px;
+  @media screen and (max-width: 500px) {
+    width: 80px;
+    font-size: 12px;
+  }
   :hover {
     background-color: #ffe3f3;
   }
