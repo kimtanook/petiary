@@ -1,16 +1,12 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import moreBtnImg from "../../img/icon/angle-down.png";
 import { getOpenDiaryPost } from "../../util/api";
-import { transformListValue } from "../../util/atom";
 import Loading from "../common/Loading";
 import DiaryPostItem from "../diary/DiaryPostItem";
 
 function DiaryOpenPostList() {
-  const transformListToggle = useRecoilValue(transformListValue);
-
   // 무한 스크롤
   const {
     data: openPost, // data.pages를 갖고 있는 배열
@@ -34,7 +30,7 @@ function DiaryOpenPostList() {
         <Loading />
       ) : (
         <>
-          <GridWrap transformListToggle={transformListToggle}>
+          <GridWrap>
             {openPost?.pages.map((page: any) =>
               page.map((item: any) => (
                 <DiaryPostItem item={item} key={uuidv4()} />
@@ -64,15 +60,9 @@ const Wrap = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const GridWrap = styled.div<{ transformListToggle: boolean }>`
-  ${({ transformListToggle }) =>
-    !transformListToggle
-      ? `
+const GridWrap = styled.div`
   display: grid;
-  @media screen and (min-width: 300px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 200px) {
     grid-template-columns: repeat(2, 1fr);
   }
   @media screen and (min-width: 900px) {
@@ -81,10 +71,6 @@ const GridWrap = styled.div<{ transformListToggle: boolean }>`
   @media screen and (min-width: 1200px) {
     grid-template-columns: repeat(4, 1fr);
   }
-`
-      : `display: flex;
-      flex-direction: column;
-  }`}
 `;
 
 const MoreBtn = styled.div`

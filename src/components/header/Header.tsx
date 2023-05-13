@@ -44,7 +44,7 @@ const LogoBox = styled.div`
   flex-direction: row;
   align-items: center;
 `;
-const LogoTitle = styled.div`
+const LogoTitle = styled.h1`
   font-weight: 700;
   font-size: 32px;
   text-align: center;

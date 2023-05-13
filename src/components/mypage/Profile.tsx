@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import female from "../../img/icon/female.png";
+import male from "../../img/icon/male.png";
 import { getUserData } from "../../util/api";
 import { editProfileValue } from "../../util/atom";
 import { authService } from "../../util/firebase";
@@ -14,17 +16,21 @@ function Profile() {
   return (
     <Wrap>
       <UserImg src={`${user?.photoURL}`} alt="user-img" />
-      <div>
+      <UserInfo>
         <UserName>{user?.displayName}</UserName>
         <div>{userData?.userType}</div>
-        <div>{userData?.userGender}</div>
+        {userData?.userGender === "여" ? (
+          <GenderImg src={female} />
+        ) : (
+          <GenderImg src={male} />
+        )}
         <div>
           {userData?.userYearBirth}년 {userData?.userMonthBirth}월{" "}
           {userData?.userDayBirth}일
         </div>
-      </div>
+      </UserInfo>
       <EditProfileBtn onClick={() => setEditProfileToggle(true)}>
-        프로필 수정
+        수정
       </EditProfileBtn>
     </Wrap>
   );
@@ -37,7 +43,8 @@ const Wrap = styled.div`
   align-items: center;
   justify-content: center;
   height: 200px;
-  border: 1px solid black;
+  width: 320px;
+  border: 2px solid #626262;
   border-radius: 12px;
   padding: 0 12px 0 12px;
 `;
@@ -47,17 +54,23 @@ const UserImg = styled.img`
   border-radius: 12px;
   width: 100px;
   height: 100px;
-  margin: 4px;
+`;
+const UserInfo = styled.div`
+  width: 140px;
+  margin-left: 12px;
 `;
 const UserName = styled.div`
   font-size: 28px;
-  margin: 4px;
 `;
+const GenderImg = styled.img`
+  width: 16px;
+`;
+
 const EditProfileBtn = styled.button`
   cursor: pointer;
   border: none;
-  width: 100px;
-  height: 24px;
+  width: 40px;
+  height: 20px;
   border-radius: 12px;
-  background-color: white;
+  background-color: #ebebeb;
 `;

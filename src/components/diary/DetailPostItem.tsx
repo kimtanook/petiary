@@ -58,9 +58,7 @@ function DetailPostItem({ postData }: any) {
 
   return (
     <Wrap>
-      <TitleBox>
-        <div>{postData.title}</div>
-      </TitleBox>
+      <TitleBox>{postData.title}</TitleBox>
       <SubWrap>
         <DayBox>
           {postData.userName} · {day} · {postData.open ? "공개글" : "비공개글"}
@@ -145,7 +143,7 @@ const DeleteButton = styled.div`
   }
 `;
 const TitleBox = styled.div`
-  width: 90%;
+  width: 45vw;
   height: 48px;
   font-size: 32px;
   padding: 10px 40px 0 40px;

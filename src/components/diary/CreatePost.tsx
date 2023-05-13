@@ -141,13 +141,14 @@ const CreatePost = () => {
         placeholder="제목 (최대 30글자)"
         maxLength={30}
       />
-      <OpenValueBox onChange={onChangeOpenValue}>
+      <OpenValueBox>
         <OpenValue>
           <input
             type="radio"
             name="openValue"
             value="비공개"
             checked={openValue === false ? true : false}
+            onChange={onChangeOpenValue}
           />
           비공개 일기
         </OpenValue>
@@ -157,6 +158,7 @@ const CreatePost = () => {
             name="openValue"
             value="공개"
             checked={openValue === true ? true : false}
+            onChange={onChangeOpenValue}
           />
           공개 일기
         </OpenValue>
