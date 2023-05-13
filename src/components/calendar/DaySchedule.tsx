@@ -1,21 +1,6 @@
 import styled from "styled-components";
 
 function DaySchedule({ item }: any) {
-  // const queryClient = useQueryClient();
-  // const { mutate: deleteScheduleMutate } = useMutation(deleteSchedule);
-
-  // const onClickDelete = () => {
-  //   if (window.confirm("정말 삭제하시겠습니까?")) {
-  //     deleteScheduleMutate(item.id, {
-  //       onSuccess: () => {
-  //         setTimeout(
-  //           () => queryClient.invalidateQueries(["scheduleData"]),
-  //           300
-  //         );
-  //       },
-  //     });
-  //   }
-  // };
   return (
     <Wrap>
       <Content>{item.content}</Content>
