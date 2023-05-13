@@ -1,15 +1,38 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
+import closeImg from "../../img/icon/cross-small.png";
+import { deleteSchedule } from "../../util/api";
 
 function DetailScheduleModal({ setDetailModal, item }: any) {
+  const queryClient = useQueryClient();
+  const { mutate: deleteScheduleMutate } = useMutation(deleteSchedule);
+
+  const onClickDelete = (id: string) => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      deleteScheduleMutate(id, {
+        onSuccess: () => {
+          setTimeout(
+            () => queryClient.invalidateQueries(["scheduleData"]),
+            300
+          );
+        },
+      });
+    }
+  };
   return (
     <Wrap>
       <DetailBox>
-        <BackBtn onClick={() => setDetailModal(false)}>뒤로</BackBtn>
+        <CloseButton src={closeImg} onClick={() => setDetailModal(false)} />
         {item.length === 0 ? (
           <div>일정이 없습니다.</div>
         ) : (
-          item.map((data: any) => <div key={uuidv4()}>{data.content}</div>)
+          item.map((data: any) => (
+            <ScheduleItem key={uuidv4()}>
+              <div>{data.content}</div>
+              <div onClick={() => onClickDelete(data.id)}>삭제</div>
+            </ScheduleItem>
+          ))
         )}
       </DetailBox>
     </Wrap>
@@ -36,9 +59,12 @@ const DetailBox = styled.div`
   width: 400px;
   height: 400px;
 `;
-const BackBtn = styled.div`
+
+const CloseButton = styled.img`
   cursor: pointer;
-  width: 40px;
+  width: 32px;
   height: 32px;
-  background-color: aqua;
+`;
+const ScheduleItem = styled.div`
+  border: 1px solid black;
 `;
