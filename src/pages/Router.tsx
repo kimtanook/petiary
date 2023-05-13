@@ -4,7 +4,7 @@ import Layout from "../components/Layout";
 import NavBar from "../components/Nav/NavBar";
 import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
-import LeftCategory from "../components/left_category/LeftCategory";
+import SubCategory from "../components/sub_category/SubCategory";
 import { authService } from "../util/firebase";
 import Landing from "./Landing";
 import Todo from "./Todo";
@@ -14,6 +14,8 @@ import Diary from "./diary/Diary";
 import PostForm from "./diary/PostForm";
 import Main from "./main/Main";
 import MyPage from "./mypage/MyPage";
+import DetailAnimal from "./shelter_animal/DetailAnimal";
+import Shelter from "./shelter_animal/Shelter";
 
 const AppRouter = () => {
   const user = authService.currentUser;
@@ -29,7 +31,7 @@ const AppRouter = () => {
         </>
       ) : null}
       {categoryTrue === "/diary" || categoryTrue === "/diary/write" ? (
-        <LeftCategory />
+        <SubCategory />
       ) : null}
       <Container categoryTrue={categoryTrue}>
         <ContentWrap>
@@ -44,6 +46,8 @@ const AppRouter = () => {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/main/:postId" element={<DetailPost />} />
             <Route path="/my-page" element={<MyPage />} />
+            <Route path="/shelter" element={<Shelter />} />
+            <Route path="/shelter/:id" element={<DetailAnimal />} />
           </Routes>
         </ContentWrap>
       </Container>
