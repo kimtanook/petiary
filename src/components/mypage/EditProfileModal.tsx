@@ -1,10 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
+import closeImg from "../../img/icon/cross-small.png";
 import { editProfileImage, getUserData } from "../../util/api";
 import { editProfileValue } from "../../util/atom";
 import { authService, storageService } from "../../util/firebase";
@@ -51,22 +53,61 @@ function EditProfileModal() {
     }
   };
   const onChangeNickname = (event: any) => {
-    setNicknameValue(event.currentTarget.value);
+    const value = event.currentTarget.value;
+    if (typeof value !== "string") {
+      alert("닉네임은 문자를 사용해주세요!");
+      return;
+    }
+    setNicknameValue(value);
   };
+
   const onChangeYearBirth = (event: any) => {
-    setYearBirthValue(event.currentTarget.value);
+    const value = event.currentTarget.value;
+    if (isNaN(value)) {
+      alert("숫자를 입력해주세요");
+      return;
+    }
+    setYearBirthValue(value);
   };
-  const onChangeDayBirth = (event: any) => {
-    setDayBirthValue(event.currentTarget.value);
-  };
+
   const onChangeMonthBirth = (event: any) => {
-    setMonthBirthValue(event.currentTarget.value);
+    const value = event.currentTarget.value;
+    if (value > 12) {
+      alert("12보다 작은 수를 입력해주세요.");
+      setMonthBirthValue("");
+      return;
+    }
+    setMonthBirthValue(value);
   };
+
+  const onChangeDayBirth = (event: any) => {
+    const value = event.currentTarget.value;
+    if (isNaN(value)) {
+      alert("숫자를 입력해주세요");
+      return;
+    }
+    setDayBirthValue(value);
+  };
+
+  const currentDate = format(new Date(), "yyyyMMdd");
+  const selectDate = `${yearBirthValue}${monthBirthValue}${dayBirthValue}`;
+
+  if (selectDate.length === 8) {
+    if (currentDate < selectDate) {
+      alert("미래에 태어나는 동물은 없어요..");
+      setYearBirthValue("");
+      setMonthBirthValue("");
+      setDayBirthValue("");
+    }
+  }
+
   const onChangeType = (event: any) => {
-    setTypeValue(event.currentTarget.value);
+    const value = event.currentTarget.value;
+    setTypeValue(value);
   };
   const onChangeGender = (event: any) => {
-    setGenderValue(event.currentTarget.value);
+    const value = event.currentTarget.value;
+    setGenderValue(value);
   };
   const submitProfile = () => {
     if (
@@ -108,7 +149,9 @@ function EditProfileModal() {
   return (
     <Wrap>
       <EditWrap>
-        <CloseBtn onClick={() => setEditProfileToggle(false)}>〈</CloseBtn>
+        <CloseBtn onClick={() => setEditProfileToggle(false)}>
+          <CloseImg src={closeImg} />
+        </CloseBtn>
         <label>
           <ProfileImg src={fileImageValue} />
           <input
@@ -118,7 +161,7 @@ function EditProfileModal() {
           />
         </label>
         <div>
-          닉네임 :
+          이름 :
           <input
             onChange={onChangeNickname}
             value={nicknameValue}
@@ -134,12 +177,21 @@ function EditProfileModal() {
             placeholder="ex) 2000"
           />
           년
-          <input
-            onChange={onChangeMonthBirth}
-            value={monthBirthValue}
-            maxLength={2}
-            placeholder="ex) 1"
-          />
+          <select onChange={onChangeMonthBirth} value={monthBirthValue}>
+            <option value="">월</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            <option value="05">05</option>
+            <option value="06">06</option>
+            <option value="07">07</option>
+            <option value="08">08</option>
+            <option value="09">09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
           월
           <input
             onChange={onChangeDayBirth}
@@ -160,11 +212,19 @@ function EditProfileModal() {
         <div>
           성별 :
           <input
+            type="radio"
+            value="남"
+            name="gender"
             onChange={onChangeGender}
-            value={genderValue}
-            maxLength={1}
-            placeholder="ex) 여"
           />
+          남
+          <input
+            type="radio"
+            value="여"
+            name="gender"
+            onChange={onChangeGender}
+          />
+          여
         </div>
         <div onClick={submitProfile}>수정완료</div>
       </EditWrap>
@@ -199,7 +259,12 @@ const CloseBtn = styled.div`
   width: 24px;
   text-align: center;
 `;
+const CloseImg = styled.img`
+  width: 32px;
+`;
 const ProfileImg = styled.img`
   width: 80px;
   height: 80px;
+  border-radius: 12px;
+  cursor: pointer;
 `;
