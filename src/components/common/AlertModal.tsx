@@ -43,11 +43,11 @@ const Box = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
+  width: 320px;
   height: 160px;
   background-color: white;
   color: black;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 500;
   border: 3px solid #ce9ab8;
   border-radius: 20px;
