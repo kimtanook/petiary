@@ -187,3 +187,12 @@ export const getSchedule = async ({ queryKey }: any) => {
 export const deleteSchedule = async (id: any) => {
   deleteDoc(doc(dbService, `calendar/${id}`));
 };
+
+// 보호동물 리스트 가져오기
+export const getAnimals = async ({ queryKey }: any) => {
+  const [_, upKind, page] = queryKey;
+
+  return fetch(
+    `https://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?_type=json&upkind=${upKind}&upr_cd=&numOfRows=10&pageNo=${page}&serviceKey=${process.env.REACT_APP_SHELTER_ANIMAL_KEY}`
+  ).then((res) => res.json());
+};
