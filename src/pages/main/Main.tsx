@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import TransformListBtn from "../../components/common/TransformListBtn";
 import DiaryOpenPostList from "../../components/main/DiaryOpenPostList";
 import Slide from "../../components/main/Slide";
 import { leftCategoryValue } from "../../util/atom";
@@ -14,7 +13,6 @@ function Main() {
   return (
     <Wrap>
       <Slide />
-      <TransformListBtn />
       <DiaryOpenPostList />
     </Wrap>
   );
