@@ -4,17 +4,18 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { getAnimals } from "../../util/api";
-import { animalPageValue, animalValue } from "../../util/atom";
+import { animalPageValue, animalValue, shelterCity } from "../../util/atom";
 import AnimalItem from "./AnimalItem";
 import PageCount from "./PageCount";
 
 function AnimalList() {
   const optionValue = useRecoilValue(animalValue);
+  const cityValue = useRecoilValue(shelterCity);
   const pageValue = useRecoilValue(animalPageValue);
   const [totalPage, setTotalPage] = useState<number>();
 
   const { data: animalData, isLoading: animalLoading } = useQuery(
-    ["animalData", optionValue, pageValue],
+    ["animalData", optionValue, cityValue, pageValue],
     getAnimals,
     {
       staleTime: 1000 * 60 * 5,
@@ -22,7 +23,6 @@ function AnimalList() {
     }
   );
   const animalList = animalData?.response.body.items.item;
-
   const length = 10;
 
   const list = Array.from({ length }, (_, index) => {
@@ -51,9 +51,13 @@ function AnimalList() {
         <Wrap>{list}</Wrap>
       ) : (
         <Wrap>
-          {animalList?.map((item: any) => (
-            <AnimalItem key={uuidv4()} item={item} />
-          ))}
+          {!animalList ? (
+            <div>보호동물이 없습니다.</div>
+          ) : (
+            animalList?.map((item: any) => (
+              <AnimalItem key={uuidv4()} item={item} />
+            ))
+          )}
         </Wrap>
       )}
       <PageCount totalPage={totalPage} />
@@ -75,17 +79,28 @@ const Wrap = styled.div`
   }
 `;
 const Skeleton = styled.div`
-  width: 200px;
+  width: 220px;
   height: 230px;
   background-color: #e2e2e2b0;
   margin: 12px;
   display: flex;
   flex-direction: column;
+  padding-top: 8px;
+  @media screen and (max-width: 500px) {
+    width: 160px;
+    height: 190px;
+    margin: 4px;
+  }
 `;
 const SkeletonImg = styled.div`
   width: 200px;
   height: 120px;
+  margin: auto;
   background-color: #dadada;
+  @media screen and (max-width: 500px) {
+    width: 140px;
+    height: 100px;
+  }
 `;
 const SkeletonInfo = styled.div`
   width: 184px;
@@ -93,6 +108,9 @@ const SkeletonInfo = styled.div`
   display: flex;
   flex-direction: column;
   padding: 8px;
+  @media screen and (max-width: 500px) {
+    width: 140px;
+  }
 `;
 const InfoTitle = styled.div`
   width: 120px;
@@ -107,4 +125,7 @@ const InfoContent = styled.div`
   background-color: #c1c1c1;
   border-radius: 20px;
   margin: 4px;
+  @media screen and (max-width: 500px) {
+    width: 140px;
+  }
 `;

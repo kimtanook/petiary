@@ -32,7 +32,7 @@ function PageCount({ totalPage }: any) {
     <Wrap>
       <Button onClick={() => setPage(String(Number(page) - 1))}>〈</Button>
       <PageBox>
-        <PageInput ref={inputRef} onChange={handleInputChange} />/
+        <PageInput ref={inputRef} onChange={handleInputChange} />/{" "}
         {Math.ceil(totalPage)}
       </PageBox>
       <Button onClick={() => setPage(String(Number(page) + 1))}>〉</Button>
@@ -47,6 +47,7 @@ const Wrap = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin-top: 12px;
 `;
 const PageBox = styled.div`
   margin: 0 12px 0 12px;
