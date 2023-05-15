@@ -25,3 +25,7 @@ export const animalPageValue = atom({
   key: `animalPageValue${uuidv4()}`,
   default: "1",
 });
+export const shelterCity = atom({
+  key: `shelterCity${uuidv4()}`,
+  default: "",
+});
