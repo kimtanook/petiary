@@ -28,7 +28,7 @@ const Top = styled.div`
   cursor: pointer;
   position: fixed;
   top: 90%;
-  right: 50px;
+  right: 2%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
